@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dynamic Spring L</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    .wrap { display: grid; grid-template-columns: 360px 1fr; gap: 24px; }
+    .card { border: 1px solid #ddd; border-radius: 10px; padding: 16px; }
+    label { display:block; margin-top: 10px; }
+    input { width: 100%; padding: 8px; margin-top: 4px; }
+    button { margin-top: 14px; padding: 10px 12px; width: 100%; }
+    pre { white-space: pre-wrap; word-break: break-word; }
+    img { max-width: 100%; border: 1px solid #eee; border-radius: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Dynamic Spring L — aL 보간/그래프/회귀식 (Streamlit 미사용)</h2>
+
+  <div class="wrap">
+    <div class="card">
+      <form method="post">
+        <label>S/2r₀</label>
+        <input name="s_val" type="number" step="0.0001" value="{{ default_s }}" required />
+
+        <label>β (B)</label>
+        <input name="b_val" type="number" step="0.0001" value="{{ default_b }}" required />
+
+        <label>목표 R²</label>
+        <input name="target_r2" type="number" step="0.001" min="0.90" max="0.999" value="{{ default_r2 }}" />
+
+        <button type="submit">계산</button>
+      </form>
+
+      {% if result %}
+      <hr />
+      <h3>결과</h3>
+      <div>aL = <b>{{ "%.10f"|format(result.aL) }}</b></div>
+      <div>회귀 차수 = <b>{{ result.deg }}</b></div>
+      <div>R² = <b>{{ "%.6f"|format(result.r2) }}</b></div>
+      <h4>회귀식</h4>
+      <pre>{{ result.eq }}</pre>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h3>그래프</h3>
+      {% if result %}
+        <img src="{{ result.plot_url }}" alt="plot" />
+      {% else %}
+        <div>좌측에 값을 입력하고 “계산”을 누르면 그래프가 생성됩니다.</div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>
